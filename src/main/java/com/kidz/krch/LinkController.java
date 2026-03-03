@@ -22,3 +22,4 @@ public class LinkController {
         return linkService.getUrl(shortCode);
     }
 }
+
