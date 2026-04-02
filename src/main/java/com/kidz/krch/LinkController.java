@@ -1,5 +1,7 @@
 package com.kidz.krch;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,13 +15,25 @@ public class LinkController {
     }
 
     @PostMapping
-    public String createShortLink(@RequestBody String originalUrl) {
-        return linkService.addUrl(originalUrl);
+    public ResponseEntity<CreateLinkResponse> createShortLink(@RequestBody LinkRequest request) {
+        String shortCode = linkService.addUrl(request.getOriginalUrl());
+        String shortUrl = "http://localhost:8080/" + shortCode;
+        CreateLinkResponse response = new CreateLinkResponse(
+            shortCode,
+            request.getOriginalUrl(),
+            shortUrl
+        );
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/{shortCode}")
-    public String getOriginalUrl(@PathVariable String shortCode) {
-        return linkService.getUrl(shortCode);
+    public ResponseEntity<GetLinkResponse> getOriginalUrl(@PathVariable String shortCode) {
+        String originalUrl = linkService.getUrl(shortCode);
+        if (originalUrl == null) {
+            return ResponseEntity.notFound().build();
+        }
+        GetLinkResponse response = new GetLinkResponse(shortCode, originalUrl);
+        return ResponseEntity.ok(response);
     }
 }
 
