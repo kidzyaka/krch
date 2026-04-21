@@ -17,5 +17,7 @@ public class CreateLinkResponse {
     public String getShortUrl() {
         return shortUrl;
     }
+
+
 }
 

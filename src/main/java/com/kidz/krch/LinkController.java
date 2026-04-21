@@ -4,6 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
+
 @RestController
 @RequestMapping("/api/links")
 public class LinkController {
@@ -17,7 +19,7 @@ public class LinkController {
     @PostMapping
     public ResponseEntity<CreateLinkResponse> createShortLink(@RequestBody LinkRequest request) {
         String shortCode = linkService.addUrl(request.getOriginalUrl());
-        String shortUrl = "http://localhost:8080/" + shortCode;
+        String shortUrl = "https://localhost:443/" + shortCode;
         CreateLinkResponse response = new CreateLinkResponse(
             shortCode,
             request.getOriginalUrl(),
